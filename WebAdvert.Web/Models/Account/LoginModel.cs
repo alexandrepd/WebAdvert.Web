@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace WebAdvert.Web.Models.Accounts
+namespace WebAdvert.Web.Models.Account
 {
     public class LoginModel
     {

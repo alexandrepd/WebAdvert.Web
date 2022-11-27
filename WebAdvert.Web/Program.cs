@@ -2,17 +2,15 @@ using Amazon.Extensions.CognitoAuthentication;
 using Microsoft.AspNetCore.Identity;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/Login";
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddCognitoIdentity();
-
-//builder.Services.AddScoped<SignInManager<CognitoUser>>();
-//builder.Services.AddScoped<UserManager<CognitoUser>>();
-//builder.Services.AddScoped<CognitoUserPool>();
-
-
 
 var app = builder.Build();
 

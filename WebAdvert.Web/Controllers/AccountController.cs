@@ -2,17 +2,19 @@
 using Amazon.Extensions.CognitoAuthentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using WebAdvert.Web.Models.Accounts;
+using WebAdvert.Web.Models.Account;
+
 
 namespace WebAdvert.Web.Controllers
 {
-    public class AccountsController : Controller
+
+    public class AccountController : Controller
     {
 
         private readonly SignInManager<CognitoUser> _signInManager;
         private readonly UserManager<CognitoUser> _userManager;
         private readonly CognitoUserPool _cognitoUserPool;
-        public AccountsController(SignInManager<CognitoUser> signInManager, UserManager<CognitoUser> userManager, CognitoUserPool cognitoUserPool)
+        public AccountController(SignInManager<CognitoUser> signInManager, UserManager<CognitoUser> userManager, CognitoUserPool cognitoUserPool)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -25,7 +27,6 @@ namespace WebAdvert.Web.Controllers
             SignupModel model = new SignupModel();
             return View(model);
         }
-
 
         [HttpPost]
         public async Task<IActionResult> Signup(SignupModel model)
@@ -95,6 +96,31 @@ namespace WebAdvert.Web.Controllers
                 }
             }
             return View(model);
+        }
+
+        public IActionResult Login()
+        {
+            LoginModel loginModel = new LoginModel();
+            return View(loginModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginModel loginModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var _result = await _signInManager.PasswordSignInAsync(loginModel.Email, loginModel.Password, loginModel.RememberMe, false);
+                if (_result.Succeeded)
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    ModelState.AddModelError("LoginError", "Email adn Password do not match");
+                }
+            }
+
+            return View(loginModel);
         }
     }
 }
