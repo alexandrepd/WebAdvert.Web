@@ -3,7 +3,7 @@ using Amazon.Extensions.CognitoAuthentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebAdvert.Web.Models.Account;
-
+using WebAdvert.Web.Models.Account.ForgetPassword;
 
 namespace WebAdvert.Web.Controllers
 {
@@ -83,7 +83,7 @@ namespace WebAdvert.Web.Controllers
 
                 if (_result.Succeeded)
                 {
-                  return  RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Home");
                 }
                 else
                 {
@@ -122,5 +122,61 @@ namespace WebAdvert.Web.Controllers
 
             return View(loginModel);
         }
+
+
+        public IActionResult ForgetPassword()
+        {
+            ForgetPasswordModel forgetPasswordModel = new ForgetPasswordModel();
+            return View("ForgetPassword/ForgetPassword");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgetPassword(ForgetPasswordModel forgetPasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var _user = await _userManager.FindByEmailAsync(forgetPasswordModel.Email);
+
+                if (_user != null)
+                {
+                    await _user.ForgotPasswordAsync();
+                    return View("ForgetPassword/ConfirmForgetPassword");
+                }
+                else
+                {
+                    ModelState.AddModelError("EmailNotFound", "Email not found");
+                }
+            }
+            return View("ForgetPassword/ForgetPassword");
+        }
+
+        public IActionResult ConfirmForgetPassword()
+        {
+            ConfirmForgetPasswordModel forgetPasswordModel = new ConfirmForgetPasswordModel();
+            return View(forgetPasswordModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ConfirmForgetPassword(ConfirmForgetPasswordModel confirmForgetPasswordModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var _user = await _userManager.FindByEmailAsync(confirmForgetPasswordModel.Email);
+
+                if (_user != null)
+                {
+                    await _user.ConfirmForgotPasswordAsync(confirmForgetPasswordModel.Code, confirmForgetPasswordModel.Password);
+
+                    if (_user.Status != null)
+                        return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+                    ModelState.AddModelError("ForgetError", "Erro while forget password");
+                }
+            }
+            return View(confirmForgetPasswordModel);
+        }
+
     }
 }

@@ -6,15 +6,15 @@ namespace WebAdvert.Web.Models.Account
 {
     public class LoginModel
     {
-        [Required(ErrorMessage ="Password is required")]
+        [Required(ErrorMessage ="Email is required")]
         [EmailAddress]
         [DisplayName("Email")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
 
         [Required(ErrorMessage ="Password is required")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        public string Password { get; set; }
+        public string? Password { get; set; }
 
         [Display(Name = "~Remember me")]
         public bool RememberMe { get; set; }

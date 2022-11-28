@@ -5,6 +5,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.LoginPath = "/Account/Login";
+    options.ExpireTimeSpan = TimeSpan.FromMinutes(1);
 });
 
 // Add services to the container.

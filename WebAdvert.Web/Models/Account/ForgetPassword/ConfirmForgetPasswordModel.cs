@@ -1,14 +1,18 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
-namespace WebAdvert.Web.Models.Account
+namespace WebAdvert.Web.Models.Account.ForgetPassword
 {
-    public class SignupModel
+    public class ConfirmForgetPasswordModel
     {
-        [Required]
+        [Required(ErrorMessage = "Email is required")]
         [EmailAddress]
-        [Display(Name = "Please type your email")]
+        [DisplayName("Email")]
         public string? Email { get; set; }
 
+        [Required(ErrorMessage = "Code is required.")]
+        public string? Code { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -16,11 +20,11 @@ namespace WebAdvert.Web.Models.Account
         [Display(Name = "Passoword")]
         public string? Password { get; set; }
 
-
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and its confirmation does not match")]
         public string? ConfirmPassword { get; set; }
+
 
     }
 }

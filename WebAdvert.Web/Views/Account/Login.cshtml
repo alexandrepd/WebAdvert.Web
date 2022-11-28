@@ -6,10 +6,10 @@
 
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-4">
         <h4>Login using your email address and password</h4>
         <h5>
-            <a asp-controller="Account" action="Signup">
+            <a asp-controller="Account" asp-action="Signup">
                 If you are not a member you can signup here
             </a>
         </h5>
@@ -34,6 +34,11 @@
             </div>
 
             <button class="btn-defaul" type="submit">Enter</button>
+
+            <hr />
+            <h6>
+                <a asp-controller="Account" asp-action="ForgetPassword">Forget Password?</a>
+            </h6>
         </form>
     </div>
 </div>
