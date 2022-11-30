@@ -116,7 +116,7 @@ namespace WebAdvert.Web.Controllers
                 }
                 else
                 {
-                    ModelState.AddModelError("LoginError", "Email adn Password do not match");
+                    ModelState.AddModelError("LoginError", "Email and Password do not match");
                 }
             }
 
@@ -153,29 +153,39 @@ namespace WebAdvert.Web.Controllers
         public IActionResult ConfirmForgetPassword()
         {
             ConfirmForgetPasswordModel forgetPasswordModel = new ConfirmForgetPasswordModel();
-            return View(forgetPasswordModel);
+            return View("ForgetPassword/ConfirmForgetPassword", forgetPasswordModel);
         }
 
         [HttpPost]
         public async Task<IActionResult> ConfirmForgetPassword(ConfirmForgetPasswordModel confirmForgetPasswordModel)
         {
-            if (ModelState.IsValid)
+            try
             {
-                var _user = await _userManager.FindByEmailAsync(confirmForgetPasswordModel.Email);
 
-                if (_user != null)
+                if (ModelState.IsValid)
                 {
-                    await _user.ConfirmForgotPasswordAsync(confirmForgetPasswordModel.Code, confirmForgetPasswordModel.Password);
+                    var _user = await _userManager.FindByEmailAsync(confirmForgetPasswordModel.Email);
 
-                    if (_user.Status != null)
-                        return RedirectToAction("Login", "Account");
+                    if (_user != null)
+                    {
+                        await _user.ConfirmForgotPasswordAsync(confirmForgetPasswordModel.Code, confirmForgetPasswordModel.Password);
+
+                        if (_user.Status != null)
+                            return RedirectToAction("Login", "Account");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError("ForgetError", "Erro while forget password");
+                    }
                 }
-                else
-                {
-                    ModelState.AddModelError("ForgetError", "Erro while forget password");
-                }
+                return View("ForgetPassword/ConfirmForgetPassword");
             }
-            return View(confirmForgetPasswordModel);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+
+                throw;
+            }
         }
 
     }

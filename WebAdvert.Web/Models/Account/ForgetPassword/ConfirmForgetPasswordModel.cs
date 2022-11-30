@@ -23,6 +23,7 @@ namespace WebAdvert.Web.Models.Account.ForgetPassword
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and its confirmation does not match")]
+        [Display(Name ="Confirm Password")]
         public string? ConfirmPassword { get; set; }
 
 

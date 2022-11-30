@@ -16,7 +16,7 @@ namespace WebAdvert.Web.Models.Account
         [Display(Name = "Password")]
         public string? Password { get; set; }
 
-        [Display(Name = "~Remember me")]
+        [Display(Name = "Remember me")]
         public bool RememberMe { get; set; }
     }
 }

@@ -6,7 +6,7 @@ namespace WebAdvert.Web.Models.Account
     {
         [Required]
         [EmailAddress]
-        [Display(Name = "Please type your email")]
+        [Display(Name = "Email")]
         public string? Email { get; set; }
 
 
@@ -20,6 +20,7 @@ namespace WebAdvert.Web.Models.Account
         [Required]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and its confirmation does not match")]
+        [Display(Name = "Confirm Passoword")]
         public string? ConfirmPassword { get; set; }
 
     }
