@@ -165,6 +165,7 @@ namespace WebAdvert.Web.Controllers
                 if (ModelState.IsValid)
                 {
                     var _user = await _userManager.FindByEmailAsync(confirmForgetPasswordModel.Email);
+                    _signInManager.
 
                     if (_user != null)
                     {
