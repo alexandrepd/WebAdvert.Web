@@ -1,0 +1,35 @@
+﻿@model WebAdvert.Web.Models.AdvertManagement.CreateAdvertNewModel;
+
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="text-center">
+            <h4>Create</h4>
+        </div>
+        <form method="post" asp-controller="AdvertManagement" asp-action="Create" enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-outline mb-2">
+                <label asp-for="Title"></label>
+                <input asp-for="Title" class="form-control"/>
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+            <div class="form-outline mb-2">
+                <label asp-for="Description"></label>
+                <input asp-for="Description"  class="form-control"/>
+            </div>
+            <div class="form-outline mb-2">
+                <label asp-for="Price"></label>
+                <input asp-for="Price"  class="form-control"/>
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+
+            <div class="form-outline mb-2">
+                <input  type="file" name="formFile" value="Upload an image" />
+            </div>
+
+            <div class="form-outline mb-2">
+                <button class="btn btn-primary btn-block mb-4" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
