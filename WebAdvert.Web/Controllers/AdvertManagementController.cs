@@ -48,9 +48,7 @@ namespace WebAdvert.Web.Controllers
 
                         throw new Exception(message: "Error to read the file.");
                     }
-
                 }
-
             }
             return View("Home");
         }

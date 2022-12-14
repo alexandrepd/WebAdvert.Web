@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Advert.Api.Models-alexandre_pd" Version="1.0.0" />
     <PackageReference Include="Amazon.AspNetCore.Identity.Cognito" Version="3.0.0" />
     <PackageReference Include="Amazon.Extensions.CognitoAuthentication" Version="2.2.3" />
     <PackageReference Include="AWSSDK.S3" Version="3.7.101.33" />

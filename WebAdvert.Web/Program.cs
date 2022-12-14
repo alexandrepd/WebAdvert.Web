@@ -1,5 +1,6 @@
-using Amazon.Extensions.CognitoAuthentication;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using System.Configuration;
+using WebAdvert.Web.Configuration;
 using WebAdvert.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,13 +10,13 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.ExpireTimeSpan = TimeSpan.FromMinutes(1);
 });
 
-builder.Services.AddScoped<IFileUploader, S3FileUploader>();
+builder.Services.Configure<AWSConfiguration>(builder.Configuration.GetSection("AWS"));
+builder.Services.AddSingleton(x => x.GetRequiredService<IOptions<AWSConfiguration>>().Value);
 
+builder.Services.AddScoped<IFileUploader, S3FileUploader>();
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-
-
 
 builder.Services.AddCognitoIdentity();
 
@@ -26,12 +27,10 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-}   
+}
 app.UseStaticFiles();
 
 app.UseRouting();
-
-
 
 app.UseAuthentication();
 app.UseAuthorization();

@@ -2,28 +2,26 @@
 using Amazon.Runtime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using WebAdvert.Web.Configuration;
 
 namespace WebAdvert.Web.Services
 {
     public class S3FileUploader : IFileUploader
     {
-        private readonly IConfiguration _configuration;
-        private readonly RegionEndpoint _region = Amazon.RegionEndpoint.USEast1;
-        private readonly BasicAWSCredentials credentials;
+        private readonly AWSConfiguration _awsConfiguration;
 
-        public S3FileUploader(IConfiguration configuration)
+        public S3FileUploader(AWSConfiguration awsConfiguration)
         {
-            _configuration = configuration;
-            credentials = new BasicAWSCredentials(_configuration["AWS:AwsAccessKeyId"], _configuration["AWS:AwsSecretAccessKey"]);
+            _awsConfiguration = awsConfiguration;
         }
 
         public async Task<bool> UploadFileAsync(string fileName, Stream storageStream)
         {
             if (string.IsNullOrEmpty(fileName)) throw new ArgumentException("The file name must be specified.");
 
-            string bucketName = _configuration.GetValue<string>("BucketName");
+            string bucketName = _awsConfiguration.BucketName;
 
-            using (var client = new AmazonS3Client(region: _region))
+            using (var client = new AmazonS3Client(region: RegionEndpoint.GetBySystemName(_awsConfiguration.Region)))
             {
                 if (storageStream.Length > 0)
                     if (storageStream.CanSeek)
