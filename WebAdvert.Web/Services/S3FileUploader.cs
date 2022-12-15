@@ -8,9 +8,9 @@ namespace WebAdvert.Web.Services
 {
     public class S3FileUploader : IFileUploader
     {
-        private readonly AWSConfiguration _awsConfiguration;
+        private readonly AWS _awsConfiguration;
 
-        public S3FileUploader(AWSConfiguration awsConfiguration)
+        public S3FileUploader(AWS awsConfiguration)
         {
             _awsConfiguration = awsConfiguration;
         }
