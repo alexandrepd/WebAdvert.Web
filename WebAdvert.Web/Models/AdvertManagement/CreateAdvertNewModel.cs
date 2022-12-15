@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using WebAdvert.Api.Models;
 
 namespace WebAdvert.Web.Models.AdvertManagement
 {

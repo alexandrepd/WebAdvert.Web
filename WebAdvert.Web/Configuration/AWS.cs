@@ -1,6 +1,6 @@
 ﻿namespace WebAdvert.Web.Configuration
 {
-    public class AWSConfiguration
+    public class AWS
     {
         public string BucketName { get; set; }
         public string AwsAccessKeyId { get; set; }

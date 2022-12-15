@@ -4,11 +4,11 @@
 
 (x) Authentication and authorization with OpenId Connect (OAuth) and AWS Cognito
 
-( ) Distributed transactions, eventual consistency, and the Saga pattern
+(X) Distributed transactions, eventual consistency, and the Saga pattern
 
-( ) Making synchronous calls to query microservices - Deep dive into HttpClientFactory class
+(X) Making synchronous calls to query microservices - Deep dive into HttpClientFactory class
 
-( ) Circuit Breaker pattern and Back-off strategy
+(X) Circuit Breaker pattern and Back-off strategy
 
 ( ) CQRS Pattern
 

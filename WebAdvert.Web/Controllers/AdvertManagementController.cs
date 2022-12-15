@@ -1,16 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using WebAdvert.Api.Models;
+using WebAdvert.Web.Configuration;
 using WebAdvert.Web.Models.AdvertManagement;
+using WebAdvert.Web.ServiceClients;
 using WebAdvert.Web.Services;
 
 namespace WebAdvert.Web.Controllers
 {
+    [Authorize]
     public class AdvertManagementController : Controller
     {
         private readonly IFileUploader _fileUploader;
+        private readonly IAdvertApiClient _advertApiClient;
+        private readonly IMapper _mapper;
 
-        public AdvertManagementController(IFileUploader fileUploader)
+        public AdvertManagementController(IFileUploader fileUploader, IAdvertApiClient advert, IMapper mapper)
         {
             _fileUploader = fileUploader;
+            _advertApiClient = advert;
+            _mapper = mapper;
         }
 
         public IActionResult Index()
@@ -20,8 +30,7 @@ namespace WebAdvert.Web.Controllers
 
         public IActionResult Create()
         {
-            CreateAdvertNewModel createAdvertNewModel = new CreateAdvertNewModel();
-            return View(createAdvertNewModel);
+            return View();
         }
 
         [HttpPost]
@@ -29,13 +38,30 @@ namespace WebAdvert.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                AdvertModel _model = _mapper.Map<AdvertModel>(createAdvertNewModel);
+
+                CreateAdvertResponse adverResponse = await _advertApiClient.Create(_model);
+                string? id = string.Empty;
+
+                if (adverResponse != null)
+                    id = adverResponse.Id;
+                else
+                    throw new Exception(message: "Impossible to create a Advert.");
+
+
+                string filePath = string.Empty;
+                bool isOkToConfirm = true;
+
                 if (formFile != null)
                 {
+                    var fileName = !string.IsNullOrEmpty(formFile.FileName) ? Path.GetFileName(formFile.FileName) : id;
+                    filePath = $"{id}/{fileName}";
+
                     try
                     {
                         using (var readStream = formFile.OpenReadStream())
                         {
-                            bool result = await _fileUploader.UploadFileAsync(formFile.FileName, readStream);
+                            bool result = await _fileUploader.UploadFileAsync(filePath, readStream);
 
                             if (!result)
                             {
@@ -45,12 +71,21 @@ namespace WebAdvert.Web.Controllers
                     }
                     catch (Exception)
                     {
-
+                        isOkToConfirm = false;
+                        var confirmModel = new ConfirmAdvertModel { Id = id, Status = AdvertStatus.Pending };
+                        await _advertApiClient.Confirm(confirmModel);
                         throw new Exception(message: "Error to read the file.");
                     }
                 }
+
+                if (isOkToConfirm)
+                {
+                    var confirmModel = new ConfirmAdvertModel { Id = id, Status = AdvertStatus.Active };
+                    await _advertApiClient.Confirm(confirmModel);
+                }
+                return RedirectToAction("Index", "Home");
             }
-            return View("Home");
+            return View(createAdvertNewModel);
         }
     }
 }
