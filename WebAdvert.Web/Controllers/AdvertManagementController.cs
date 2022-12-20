@@ -40,6 +40,8 @@ namespace WebAdvert.Web.Controllers
             {
                 AdvertModel _model = _mapper.Map<AdvertModel>(createAdvertNewModel);
 
+                _model.UserName = User.Identity.Name;
+
                 CreateAdvertResponse adverResponse = await _advertApiClient.Create(_model);
                 string? id = string.Empty;
 
@@ -80,7 +82,7 @@ namespace WebAdvert.Web.Controllers
 
                 if (isOkToConfirm)
                 {
-                    var confirmModel = new ConfirmAdvertModel { Id = id, Status = AdvertStatus.Active };
+                    var confirmModel = new ConfirmAdvertModel { Id = id, FilePath = filePath,  Status = AdvertStatus.Active };
                     await _advertApiClient.Confirm(confirmModel);
                 }
                 return RedirectToAction("Index", "Home");
