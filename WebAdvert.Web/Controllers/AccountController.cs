@@ -123,6 +123,13 @@ namespace WebAdvert.Web.Controllers
             return View(loginModel);
         }
 
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+
+            return Redirect("../home/Index");
+        }
+
 
         public IActionResult ForgetPassword()
         {
