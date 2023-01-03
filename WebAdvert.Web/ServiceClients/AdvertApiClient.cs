@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.Json.Nodes;
 using WebAdvert.Api.Models;
 using WebAdvert.Web.Configuration;
 
@@ -15,7 +16,7 @@ namespace WebAdvert.Web.ServiceClients
         {
             _advertApi = advertApi;
             _httpClient = httpClient;
-            
+
         }
 
         public async Task<CreateAdvertResponse> Create(AdvertModel advertModel)
@@ -45,6 +46,42 @@ namespace WebAdvert.Web.ServiceClients
             HttpResponseMessage response = await _httpClient.PutAsync(_uri, httpContent);
 
             return response.StatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        public async Task<List<AdvertModel>> GetAll()
+        {
+            string _confirmEndPoint = _advertApi.BaseAddress + _advertApi.GetAllUrl;
+            Uri _uri = new Uri(_confirmEndPoint);
+
+            HttpResponseMessage response = await _httpClient.GetAsync(_uri);
+
+            string responseJson = await response.Content.ReadAsStringAsync();
+
+            List<AdvertModel> advertModels = JsonConvert.DeserializeObject<List<AdvertModel>>(responseJson);
+
+
+            return advertModels;
+        }
+
+        public async Task<bool> Delete(string Id)
+        {
+            string _url = _advertApi.BaseAddress + _advertApi.DeleteUrl + $"?id={Id}";
+            Uri _uri = new Uri(_url);
+
+            HttpContent content = new StringContent("application/json");
+            HttpResponseMessage response = await _httpClient.DeleteAsync(_uri);
+
+            return response.StatusCode == System.Net.HttpStatusCode.OK;
+        }
+
+        public Task<CreateAdvertResponse> Update(AdvertModel advertModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<AdvertModel> Get(string id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

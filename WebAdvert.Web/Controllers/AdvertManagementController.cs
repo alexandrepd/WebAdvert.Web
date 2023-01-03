@@ -28,6 +28,7 @@ namespace WebAdvert.Web.Controllers
             return View();
         }
 
+
         public IActionResult Create()
         {
             return View();
@@ -82,12 +83,23 @@ namespace WebAdvert.Web.Controllers
 
                 if (isOkToConfirm)
                 {
-                    var confirmModel = new ConfirmAdvertModel { Id = id, FilePath = filePath,  Status = AdvertStatus.Active };
+                    var confirmModel = new ConfirmAdvertModel { Id = id, FilePath = filePath, Status = AdvertStatus.Active };
                     await _advertApiClient.Confirm(confirmModel);
                 }
                 return RedirectToAction("Index", "Home");
             }
             return View(createAdvertNewModel);
+        }
+
+
+
+
+        public async Task<IActionResult> Delete(string Id)
+        {
+            await _advertApiClient.Delete(Id);
+
+            return RedirectToAction("Index", "Home");
+
         }
     }
 }
