@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAdvert.Api.Models;
-using WebAdvert.Web.Configuration;
 using WebAdvert.Web.Models.AdvertManagement;
 using WebAdvert.Web.ServiceClients;
 using WebAdvert.Web.Services;
@@ -27,8 +26,6 @@ namespace WebAdvert.Web.Controllers
         {
             return View();
         }
-
-
         public IActionResult Create()
         {
             return View();
@@ -91,15 +88,47 @@ namespace WebAdvert.Web.Controllers
             return View(createAdvertNewModel);
         }
 
-
-
-
         public async Task<IActionResult> Delete(string Id)
         {
             await _advertApiClient.Delete(Id);
 
             return RedirectToAction("Index", "Home");
 
+        }
+
+        public async Task<IActionResult> Edit(string Id)
+        {
+            AdvertModel _advertModel = await _advertApiClient.Get(Id);
+            UpdateAdvertModel _model;
+            if (_advertModel != null)
+            {
+                _model = new UpdateAdvertModel
+                {
+                    Id = Id,
+                    Title = _advertModel.Title,
+                    Description = _advertModel.Description,
+                    Price = _advertModel.Price
+                };
+                return View(_model);
+            }
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(UpdateAdvertModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                AdvertModel _advertModel = await _advertApiClient.Get(model.Id);
+                _advertModel.Title = model.Title;
+                _advertModel.Description = model.Description;
+                _advertModel.Price = model.Price;
+
+                await _advertApiClient.Update(_advertModel);
+                return RedirectToAction("Index", "Home");
+            }
+            return View(model);
         }
     }
 }

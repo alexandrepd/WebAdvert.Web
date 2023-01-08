@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json.Nodes;
@@ -74,14 +75,39 @@ namespace WebAdvert.Web.ServiceClients
             return response.StatusCode == System.Net.HttpStatusCode.OK;
         }
 
-        public Task<CreateAdvertResponse> Update(AdvertModel advertModel)
+        public async Task<bool> Update(AdvertModel advertModel)
         {
+
+            string _confirmEndPoint = _advertApi.BaseAddress + _advertApi.UpdateUrl;
+            Uri _uri = new Uri(_confirmEndPoint);
+
+            string jsonModel = JsonConvert.SerializeObject(advertModel);
+
+            HttpContent httpContent = new StringContent(jsonModel, Encoding.UTF8, "application/json");
+            HttpResponseMessage response = await _httpClient.PutAsync(_uri, httpContent);
+
+            return response.StatusCode == System.Net.HttpStatusCode.OK;
+
             throw new NotImplementedException();
         }
 
-        public Task<AdvertModel> Get(string id)
+        public async Task<AdvertModel> Get(string Id)
         {
-            throw new NotImplementedException();
+
+            string _url = _advertApi.BaseAddress + _advertApi.GetUrl + Id;
+            Uri _uri = new Uri(_url);
+
+            HttpContent content = new StringContent("application/json");
+            HttpResponseMessage response = await _httpClient.GetAsync(_uri);
+
+            string responseJson = await response.Content.ReadAsStringAsync();
+            AdvertModel advertModel = JsonConvert.DeserializeObject<AdvertModel>(responseJson);
+
+            if (advertModel != null)
+            {
+                return advertModel;
+            }
+            return null;
         }
     }
 }

@@ -10,7 +10,7 @@ namespace WebAdvert.Web.ServiceClients
         Task<bool> Confirm(ConfirmAdvertModel confirmAdvertModel);
         Task<List<AdvertModel>> GetAll();
         Task<bool> Delete(string Id);
-        Task<CreateAdvertResponse> Update(AdvertModel advertModel);
+        Task<bool> Update(AdvertModel advertModel);
 
     }
 }
