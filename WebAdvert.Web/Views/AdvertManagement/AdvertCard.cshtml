@@ -1,0 +1,28 @@
+﻿@model WebAdvert.Web.Models.AdvertManagement.AdvertCardModel;
+@using Microsoft.Extensions.Configuration;
+@inject IConfiguration configuration
+
+@{
+    var advertImageUrl = configuration.GetValue<string>("ImageBaseUrl");
+
+    var defaultImageUrl = configuration.GetValue<string>("ImageDefault");
+    var imageUrl = string.IsNullOrEmpty(Model.Image) ? defaultImageUrl :
+        $"{advertImageUrl}/{Model.Image}";
+
+}
+
+<div class="card">
+  <h5 class="card-header">@Model.Title</h5>
+  <div class="card-body">
+    
+    <div class="row">
+        <div class="col-sm-2">
+        <img src="@imageUrl" alt="Avatar"  style="width:100%">
+        </div>
+        <div class="col-sm-6">
+            <p class="card-text">@Model.Description</p>
+        </div>
+    </div>
+  </div>
+</div>
+

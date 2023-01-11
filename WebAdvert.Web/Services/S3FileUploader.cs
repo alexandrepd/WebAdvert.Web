@@ -27,7 +27,14 @@ namespace WebAdvert.Web.Services
                     if (storageStream.CanSeek)
                         storageStream.Seek(0, SeekOrigin.Begin);
 
-                var request = new PutObjectRequest { AutoCloseStream = true, BucketName = bucketName, InputStream = storageStream, Key = fileName };
+                var request = new PutObjectRequest
+                {
+                    AutoCloseStream = true,
+                    BucketName = bucketName,
+                    InputStream = storageStream,
+                    Key = fileName,
+                    CannedACL = Amazon.S3.S3CannedACL.PublicRead
+                };
 
                 var response = await client.PutObjectAsync(request);
                 return response.HttpStatusCode == System.Net.HttpStatusCode.OK;

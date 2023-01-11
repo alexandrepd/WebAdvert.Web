@@ -1,8 +1,36 @@
-﻿@model List<WebAdvert.Api.Models.AdvertModel>
+﻿@model List<WebAdvert.Web.Models.AdvertManagement.AdvertCardModel>
 @{
     ViewData["Title"] = "Home Page";
 }
+@*
+<div class="row  pt-2 pb-2" id="Search">
+    <div class="col-md-2 col-sm-4 text-left">
+        <span>Enter a keyword:</span>
+    </div>
+    <div class="col-md-12 col-sm-8 text-left">
+        <form method="post" asp-controller="Home" asp-action="Search">
+            <input type="text"
+                   name="keyword"
+                   id="keyword"
+                   class="form-control float-left"
+                   required
+                   placeholder="Keyword"
+                   style="width: 80%; margin-right: 5px" />
 
+            <button type="submit" class="btn-secondary" placeholder="Keyword" required>Search</button>
+        </form>
+    </div>*@
+
+
+
+     <div class="col-md-12 mt-3">
+        @foreach (var viewModel in Model)
+        {
+            await Html.RenderPartialAsync("../AdvertManagement/AdvertCard", viewModel);
+        }
+    </div>
+
+@*
 <div class="text-center">
 
 
@@ -20,7 +48,6 @@
             <th>Title</th>
             <th>Description</th>
             <th>Price</th>
-            <th>ID</th>
             <th></th>
             <th></th>
             </tr>
@@ -32,7 +59,6 @@
                 <td>@item.Title</td>
                 <td>@item.Description</td>
                 <td>@item.Price</td>
-                <td>@item.Id</td>
                 <td><a role="button" type="button" class="btn btn-info" asp-route-id="@item.Id" asp-controller="AdvertManagement" asp-action="Edit">Editar</a></td>
                 <td><a role="button"  class="btn btn-danger" asp-route-id="@item.Id" asp-controller="AdvertManagement" asp-action="Delete" onclick="return confirm('Are sure wants to delete?');">Excluir</a></td>
                 </tr>
@@ -40,3 +66,4 @@
             </table>
     }
 </div>
+*@

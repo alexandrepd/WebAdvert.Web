@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebAdvert.Api.Models;
 using WebAdvert.Web.Models;
+using WebAdvert.Web.Models.AdvertManagement;
 using WebAdvert.Web.ServiceClients;
 
 namespace WebAdvert.Web.Controllers
@@ -26,7 +27,17 @@ namespace WebAdvert.Web.Controllers
         public async Task<IActionResult> Index()
         {
             List<AdvertModel> advertModels = await _advertApiClient.GetAll();
-            return View(advertModels);
+            List<AdvertCardModel> list = advertModels.Select(advertModel =>
+
+            new AdvertCardModel()
+            {
+                Id = advertModel.Id,
+                Title = advertModel.Title,
+                Description = advertModel.Description,
+                Image = advertModel.FilePath
+
+            }).ToList();
+            return View(list);
         }
 
         public IActionResult Privacy()

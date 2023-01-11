@@ -61,6 +61,7 @@ namespace WebAdvert.Web.Controllers
                     {
                         using (var readStream = formFile.OpenReadStream())
                         {
+                            
                             bool result = await _fileUploader.UploadFileAsync(filePath, readStream);
 
                             if (!result)
