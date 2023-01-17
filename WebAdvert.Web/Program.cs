@@ -44,6 +44,7 @@ IAsyncPolicy<HttpResponseMessage> GetRetryPolice()
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddCognitoIdentity();
+builder.Services.AddTransient<ISearchApiClient, SearchApi>();
 
 var app = builder.Build();
 

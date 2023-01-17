@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-@*
+
 <div class="row  pt-2 pb-2" id="Search">
     <div class="col-md-2 col-sm-4 text-left">
         <span>Enter a keyword:</span>
@@ -19,51 +19,21 @@
 
             <button type="submit" class="btn-secondary" placeholder="Keyword" required>Search</button>
         </form>
-    </div>*@
-
-
-
-     <div class="col-md-12 mt-3">
+    </div>
+@*
+@if (Model == null || Model.Count == 0)
+{
+    <div class="row text-center">
+        <h1>Sorry, the items are out of sotck.</h1>
+    </div>
+}
+else
+{
+    <div class="col-md-12 mt-3">
         @foreach (var viewModel in Model)
         {
-            await Html.RenderPartialAsync("../AdvertManagement/AdvertCard", viewModel);
+        await Html.RenderPartialAsync("../AdvertManagement/AdvertCard", viewModel);
         }
     </div>
+}*@
 
-@*
-<div class="text-center">
-
-
-
-    @if (Model == null)
-    {
-            <h1 class="display-4">Welcome</h1>
-            <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    }
-    else
-    {
-            <table class="table">
-            <thead>
-            <tr>
-            <th>Title</th>
-            <th>Description</th>
-            <th>Price</th>
-            <th></th>
-            <th></th>
-            </tr>
-            </thead>
-
-            @foreach (var item in Model)
-            {
-                <tr>
-                <td>@item.Title</td>
-                <td>@item.Description</td>
-                <td>@item.Price</td>
-                <td><a role="button" type="button" class="btn btn-info" asp-route-id="@item.Id" asp-controller="AdvertManagement" asp-action="Edit">Editar</a></td>
-                <td><a role="button"  class="btn btn-danger" asp-route-id="@item.Id" asp-controller="AdvertManagement" asp-action="Delete" onclick="return confirm('Are sure wants to delete?');">Excluir</a></td>
-                </tr>
-            }
-            </table>
-    }
-</div>
-*@

@@ -5,6 +5,7 @@ using System.Diagnostics;
 using WebAdvert.Api.Models;
 using WebAdvert.Web.Models;
 using WebAdvert.Web.Models.AdvertManagement;
+using WebAdvert.Web.Models.Home;
 using WebAdvert.Web.ServiceClients;
 
 namespace WebAdvert.Web.Controllers
@@ -14,13 +15,14 @@ namespace WebAdvert.Web.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly IAdvertApiClient _advertApiClient;
         private readonly IMapper _mapper;
+        private readonly ISearchApiClient _searchApiClient;
 
-        public HomeController(ILogger<HomeController> logger, IAdvertApiClient advertApiClient, IMapper mapper)
+        public HomeController(ILogger<HomeController> logger, IAdvertApiClient advertApiClient, IMapper mapper, ISearchApiClient searchApiClient)
         {
             _logger = logger;
             _advertApiClient = advertApiClient;
             _mapper = mapper;
-
+            _searchApiClient = searchApiClient;
         }
 
         [Authorize]
@@ -43,6 +45,21 @@ namespace WebAdvert.Web.Controllers
         public IActionResult Privacy()
         {
             return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(string keyword)
+        {
+            var viewModel = new List<SearchViewModel>();
+            var searchResult = await _searchApiClient.Search(keyword);
+
+            foreach (AdvertType doc in searchResult)
+            {
+                var viewModelItem = _mapper.Map<SearchViewModel>(doc);
+                viewModel.Add(viewModelItem);
+            }
+
+            return View("../AdvertManagement/AdvertCard", viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
