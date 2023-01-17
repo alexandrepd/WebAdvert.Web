@@ -16,21 +16,20 @@ namespace WebAdvert.Web.ServiceClients
 
         public async Task<List<AdvertType>> Search(string keyword)
         {
-            var result = new List<AdvertType>();
+            List<AdvertType> result = new List<AdvertType>();
             string callUrl = $"{_baseAddress}/{keyword}";
-            //HttpContent content = new StringContent("application/json");
+            
+            HttpResponseMessage response = await _httpClient.GetAsync(new Uri(callUrl));
 
-            var response = await _httpClient.GetAsync(new Uri(callUrl));
             if (response.StatusCode == System.Net.HttpStatusCode.OK)
             {
-                var content = await response.Content.ReadAsStringAsync();
-                var options = new JsonSerializerOptions
+                string content = await response.Content.ReadAsStringAsync();
+                JsonSerializerOptions options = new JsonSerializerOptions
                 {
                     PropertyNameCaseInsensitive = true
                 };
 
-                var Alladverts = JsonSerializer.Deserialize<List<AdvertType>>(content, options);
-                result.AddRange(Alladverts);
+                result.AddRange(JsonSerializer.Deserialize<List<AdvertType>>(content, options)!);
             }
             return result;
         }

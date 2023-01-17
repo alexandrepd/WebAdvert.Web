@@ -31,9 +31,9 @@ namespace WebAdvert.Web.ServiceClients
             HttpResponseMessage response = await _httpClient.PostAsync(_uri, content);
 
             string responseJson = await response.Content.ReadAsStringAsync();
-            CreateAdvertResponse createAdvertResponse = JsonConvert.DeserializeObject<CreateAdvertResponse>(responseJson);
+            CreateAdvertResponse createAdvertResponse = JsonConvert.DeserializeObject<CreateAdvertResponse>(responseJson)!;
 
-            return createAdvertResponse;
+            return createAdvertResponse!;
         }
 
         public async Task<bool> Confirm(ConfirmAdvertModel confirmAdvertModel)
@@ -58,7 +58,7 @@ namespace WebAdvert.Web.ServiceClients
 
             string responseJson = await response.Content.ReadAsStringAsync();
 
-            List<AdvertModel> advertModels = JsonConvert.DeserializeObject<List<AdvertModel>>(responseJson);
+            List<AdvertModel> advertModels = JsonConvert.DeserializeObject<List<AdvertModel>>(responseJson)!;
 
 
             return advertModels;
@@ -93,21 +93,15 @@ namespace WebAdvert.Web.ServiceClients
 
         public async Task<AdvertModel> Get(string Id)
         {
-
             string _url = _advertApi.BaseAddress + _advertApi.GetUrl + Id;
             Uri _uri = new Uri(_url);
 
-            HttpContent content = new StringContent("application/json");
             HttpResponseMessage response = await _httpClient.GetAsync(_uri);
 
             string responseJson = await response.Content.ReadAsStringAsync();
-            AdvertModel advertModel = JsonConvert.DeserializeObject<AdvertModel>(responseJson);
+            AdvertModel advertModel = JsonConvert.DeserializeObject<AdvertModel>(responseJson)!;
 
-            if (advertModel != null)
-            {
-                return advertModel;
-            }
-            return null;
+            return advertModel;
         }
     }
 }
