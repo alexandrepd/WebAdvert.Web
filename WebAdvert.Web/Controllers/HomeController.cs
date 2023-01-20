@@ -59,7 +59,7 @@ namespace WebAdvert.Web.Controllers
                 viewModel.Add(viewModelItem);
             }
 
-            return View("../AdvertManagement/AdvertCard", viewModel);
+            return View("../AdvertManagement/SearchCard", viewModel);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

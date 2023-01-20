@@ -10,8 +10,9 @@ namespace WebAdvert.Web.Services
     {
         public AdvertProfile()
         {
-            CreateMap<CreateAdvertNewModel, AdvertModel >();
-            CreateMap<AdvertType, SearchViewModel>();
+            CreateMap<CreateAdvertNewModel, AdvertModel>().ReverseMap();
+            CreateMap<AdvertType, AdvertCardModel>().ReverseMap();
+            CreateMap<AdvertType, SearchViewModel>().ReverseMap();
             //CreateMap<>(CreateAdvertResponse, AdvertResponse);
         }
     }
