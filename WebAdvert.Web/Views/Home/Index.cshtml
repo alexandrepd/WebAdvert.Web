@@ -2,7 +2,6 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
 <div id="Search">
     <div class="row">
         <span>Enter a keyword:</span>
@@ -10,7 +9,8 @@
 
         <form method="post" asp-controller="Home" asp-action="Search">
             <div class="row">
-            <input type="text" class="col-md-10 col-xs-10 col-sm-10" name="keyword" id="keyword" required placeholder="Keyword" />
+            <input type="text" class="col-md-9 col-xs-9 col-sm-9" name="keyword" id="keyword" required placeholder="Keyword" />
+            <div class="col-md-1 col-xs-1 col-sm-1"></div>
             <button type="submit" class="btn-secondary col-md-2 col-xs-2 col-sm-2"  placeholder="Keyword" required>Search</button>
             </div>
         </form>
@@ -19,7 +19,6 @@
 <br />
 <div class="row">
     @{
-        int _cont = 0;
         foreach (var viewModel in Model)
         {
             await Html.RenderPartialAsync("../AdvertManagement/AdvertCard", viewModel);
